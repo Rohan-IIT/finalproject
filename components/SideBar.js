@@ -8,13 +8,7 @@ const SideBar = forwardRef(({ showNav }, ref) => {
   return (
     <div ref={ref} className="fixed w-56 h-full bg-white shadow-sm">
       <div className="flex justify-center mt-6 mb-14">
-        <picture>
-          <img
-            className="w-32 h-auto"
-            src="/ferox-transparent.png"
-            alt="company logo"
-          />
-        </picture>
+        <h1>City City</h1>
       </div>
 
       <div className="flex flex-col">
@@ -29,20 +23,6 @@ const SideBar = forwardRef(({ showNav }, ref) => {
           
             <div>
               <p>Home</p>
-            </div>
-          </div>
-        </Link>
-        <Link href="/account">
-          <div
-            className={`pl-6 py-3 mx-5 rounded text-center cursor-pointer mb-3 flex items-center transition-colors ${
-              router.pathname == "/account"
-                ? "bg-orange-100 text-orange-500"
-                : "text-gray-400 hover:bg-orange-100 hover:text-orange-500"
-            }`}
-          >
-         
-            <div>
-              <p>Account</p>
             </div>
           </div>
         </Link>

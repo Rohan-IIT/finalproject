@@ -1,100 +1,74 @@
-import Layout from "../components/Layout";
+// Weather.tsx
 import React, { useEffect, useState } from 'react';
+import Layout from "../components/Layout";
 
-interface CityWeatherData {
-  query: string;
-  timezone: string;
-  temperature: number | undefined;
-  windSpeed: number | undefined;
-  currentTime: string;
+interface WeatherData {
+  name: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  weather: {
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  wind: {
+    speed: number;
+    deg: number;
+  };
 }
 
 const Weather: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<CityWeatherData[]>([]);
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
   useEffect(() => {
-    // Get timezone from localStorage
-    const timezone = localStorage.getItem('city');
+    // Get latitude and longitude from localStorage
+    const latitude = localStorage.getItem('latitude');
+    const longitude = localStorage.getItem('longitude');
 
-    if (!timezone) {
-      console.error('Timezone not found in localStorage');
+    if (!latitude || !longitude) {
+      console.error('Latitude or longitude not found in localStorage');
       return;
     }
 
-    const getCityWeather = async (timezone: string) => {
-      const weatherUrl = `http://api.weatherstack.com/current?access_key=f536d0223f2c50e88790a3efcbb2600d&query=${timezone}`;
+    const apiKey = '8c5d1db5f7550dfe849f607f9937218f';
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
+    const fetchData = async () => {
       try {
-        const weatherResponse = await fetch(weatherUrl);
-        const weatherAPI = await weatherResponse.json();
-        const currentTemperature = weatherAPI.current?.temperature;
-        const windSpeed = weatherAPI.current?.wind_speed;
-
-        return {
-          temperature: currentTemperature,
-          windSpeed,
-        };
+        const response = await fetch(weatherUrl);
+        const data: WeatherData = await response.json();
+        setWeatherData(data);
       } catch (error) {
         console.error('Error fetching weather data:', error);
-        return {
-          temperature: undefined,
-          windSpeed: undefined,
-        };
       }
     };
 
-    const fetchWeatherData = async () => {
-      try {
-        const weather = await getCityWeather(timezone);
-
-        if (weather.temperature !== undefined && weather.windSpeed !== undefined) {
-          setWeatherData([
-            {
-              query: 'YourCity', // Replace with a meaningful query
-              timezone,
-              temperature: weather.temperature,
-              windSpeed: weather.windSpeed,
-              currentTime: new Date().toLocaleString(), // Use local time as a fallback
-            },
-          ]);
-        } else {
-          console.error('Invalid or missing weather data:', weather);
-          // Handle the case when temperature or windSpeed is not available
-        }
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        // Handle the case when the API request fails
-      }
-    };
-
-    fetchWeatherData();
+    fetchData();
   }, []); // Empty dependency array to run the effect only once
 
   return (
     <Layout>
-      <h2>City Weather Data</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>City</th>
-            <th>Timezone</th>
-            <th>Temperature</th>
-            <th>Wind Speed</th>
-            <th>Current Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {weatherData.map((data) => (
-            <tr key={data.timezone}>
-              <td>{data.query}</td>
-              <td>{data.timezone}</td>
-              <td>{data.temperature} °C</td>
-              <td>{data.windSpeed} m/s</td>
-              <td>{data.currentTime}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Weather Information</h2>
+      {weatherData && (
+        <div>
+          <h3>{weatherData.name}</h3>
+          <p>Temperature: {weatherData.main.temp}°C</p>
+          <p>Feels Like: {weatherData.main.feels_like}°C</p>
+          <p>Min Temperature: {weatherData.main.temp_min}°C</p>
+          <p>Max Temperature: {weatherData.main.temp_max}°C</p>
+          <p>Pressure: {weatherData.main.pressure} hPa</p>
+          <p>Humidity: {weatherData.main.humidity}%</p>
+          <p>Weather: {weatherData.weather[0].main}</p>
+          <p>Description: {weatherData.weather[0].description}</p>
+          <p>Wind Speed: {weatherData.wind.speed} m/s</p>
+        </div>
+      )}
     </Layout>
   );
 };
