@@ -71,35 +71,39 @@ const Sunset: React.FC = () => {
 
   return (
     <Layout>
-      <h2>Sunrise/Sunset Data</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Sunrise</th>
-            <th>Sunset</th>
-            <th>Dawn</th>
-            <th>Dusk</th>
-            <th>Day Length</th>
-            <th>Solar Noon</th>
-            <th>Time Zone</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sunriseData.map((data) => (
-            <tr key={data.date}>
-              <td>{data.date}</td>
-              <td>{data.sunrise}</td>
-              <td>{data.sunset}</td>
-              <td>{data.dawn}</td>
-              <td>{data.dusk}</td>
-              <td>{data.day_length}</td>
-              <td>{data.solar_noon}</td>
-              <td>{data.timezone}</td>
+     <div className="container mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-4">Sunrise/Sunset Data</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="py-2 px-4 border">Date</th>
+              <th className="py-2 px-4 border">Sunrise</th>
+              <th className="py-2 px-4 border">Sunset</th>
+              <th className="py-2 px-4 border">Dawn</th>
+              <th className="py-2 px-4 border">Dusk</th>
+              <th className="py-2 px-4 border">Day Length</th>
+              <th className="py-2 px-4 border">Solar Noon</th>
+              <th className="py-2 px-4 border">Time Zone</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sunriseData.map((data) => (
+              <tr key={data.date} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border">{data.date}</td>
+                <td className="py-2 px-4 border">{data.sunrise}</td>
+                <td className="py-2 px-4 border">{data.sunset}</td>
+                <td className="py-2 px-4 border">{data.dawn}</td>
+                <td className="py-2 px-4 border">{data.dusk}</td>
+                <td className="py-2 px-4 border">{data.day_length}</td>
+                <td className="py-2 px-4 border">{data.solar_noon}</td>
+                <td className="py-2 px-4 border">{data.timezone}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
     </Layout>
   );
 };

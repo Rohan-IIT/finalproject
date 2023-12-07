@@ -6,7 +6,7 @@ const SideBar = forwardRef(({ showNav }, ref) => {
   const router = useRouter();
 
   return (
-    <div ref={ref} className="fixed w-56 h-full bg-white shadow-sm">
+    <div ref={ref} className="fixed w-56 h-full bg-gray-100 shadow-sm ">
       <div className="flex justify-center mt-6 mb-14">
         <h1>City City</h1>
       </div>
@@ -85,7 +85,20 @@ const SideBar = forwardRef(({ showNav }, ref) => {
           </div>
         </Link>
 
-
+        <Link href="/earthquake">
+          <div
+            className={`pl-6 py-3 mx-5 rounded text-center cursor-pointer mb-3 flex items-center transition-colors ${
+              router.pathname == "/earthquake"
+                ? "bg-orange-100 text-orange-500"
+                : "text-gray-400 hover:bg-orange-100 hover:text-orange-500"
+            }`}
+          >
+         
+            <div>
+              <p>Earthquake</p>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );
