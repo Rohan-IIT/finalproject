@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../types';
 import Layout from "../components/Layout";
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 interface UserDetailsProps {
@@ -28,18 +29,18 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ user }) => {
       setPhotos([]);
     }
   };
-
+  const router = useRouter();
   useEffect(() => {
     // Fetch city photos when the component mounts
     getCityPhotos(cityName);
-  }, [cityName]); // Empty dependency array to ensure the effect runs only once
+  }, [cityName, router]); // Empty dependency array to ensure the effect runs only once
 
   return (
     <Layout>
       <h1 className="mb-4 text-3xl font-bold mt-5">City Photos Page</h1>
       <div id="photoContainer" className="flex flex-wrap gap-4">
         {photos.map((photo) => (
-         <Image key={photo.id} src={photo.src.original} alt={`City Photo ${photo.id}`} className="rounded w-full w-1/2 lg:w-1/3 xl:w-1/4 object-cover" />
+         <img key={photo.id} src={photo.src.original} alt={`City Photo ${photo.id}`} className="rounded w-full w-1/2 lg:w-1/3 xl:w-1/4 object-cover" />
         ))}
       </div>
     </Layout>
