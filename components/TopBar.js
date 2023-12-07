@@ -3,6 +3,10 @@ import { Menu, Transition, Popover } from "@headlessui/react";
 import Link from "next/link";
 
 export default function TopBar({ showNav, setShowNav }) {
+
+  const userName = typeof window !== "undefined" ? localStorage.getItem("name") : null;
+
+
   return (
     <div
       className={`fixed w-full h-16 flex justify-between items-center transition-all duration-[400ms] ${
@@ -13,7 +17,7 @@ export default function TopBar({ showNav, setShowNav }) {
         <button
           className="h-8 w-8 text-gray-700 cursor-pointer"
           onClick={() => setShowNav(!showNav)}
-        > click </button>
+        > X </button>
       </div>
       <div className="flex items-center pr-4 md:pr-16">
   
@@ -21,7 +25,7 @@ export default function TopBar({ showNav, setShowNav }) {
           <div>
             <Menu.Button className="inline-flex w-full justify-center items-center">
               <span className="hidden md:block font-medium text-gray-700">
-                Username
+              {userName || "Username"}
               </span>
             </Menu.Button>
           </div>

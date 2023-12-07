@@ -1,14 +1,18 @@
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from 'react';
 import Layout from "../components/Layout";
 
-
-// LatLong.tsx
-import React, { useEffect } from 'react';
-
 const LatLong: React.FC = () => {
+  const [latitude, setLatitude] = useState<string | null>(null);
+  const [longitude, setLongitude] = useState<string | null>(null);
+
   useEffect(() => {
-    // Get city name from localStorage
+    // Get cityName from localStorage
     const cityName = localStorage.getItem('city');
+
+    if (!cityName) {
+      console.error('City name not found in localStorage');
+      return;
+    }
 
     const geocodeUrl = `https://geocode.maps.co/search?q=${encodeURIComponent(cityName)}`;
 
@@ -16,41 +20,43 @@ const LatLong: React.FC = () => {
       .then(response => response.json())
       .then(data => {
         if (data.length === 0) {
-          // Handle the case where there are no results for the entered city name
           let errorString = 'No location found for the entered city name. Please try entering a correct name.';
+          console.error(errorString);
           return;
         }
 
-        // Use the first result from the geocode API
         const firstResult = data[0];
 
         if (firstResult && firstResult.lat && firstResult.lon) {
           const latitude = firstResult.lat;
           const longitude = firstResult.lon;
 
-          // Display in HTML
-          const latLongContainer = document.getElementById('latLong');
-          if (latLongContainer) {
-            latLongContainer.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
-          }
+          // Store latitude and longitude in state
+          setLatitude(latitude);
+          setLongitude(longitude);
 
-          // Set lat long in localStorage
-          localStorage.setItem('latitude', latitude);
-          localStorage.setItem('longitude', longitude);
-
-          console.log(latitude, longitude);
+          console.log('Latitude:', latitude);
+          console.log('Longitude:', longitude);
         } else {
-          // Handle the case where geocode API response is not as expected
           console.error('Invalid geocode API response');
-          // alert('Error getting geolocation data. Please try again.');
         }
+      })
+      .catch(error => {
+        console.error('Error fetching geolocation data:', error);
       });
   }, []); // Empty dependency array to run the effect only once
 
   return (
     <Layout>
       <h2>Latitude and Longitude</h2>
-      <div id="latLong"></div>
+      {latitude && longitude ? (
+        <div id="latLong">
+          <p>Latitude: {latitude}</p>
+          <p>Longitude: {longitude}</p>
+        </div>
+      ) : (
+        <p>Latitude and Longitude data not available.</p>
+      )}
     </Layout>
   );
 };
