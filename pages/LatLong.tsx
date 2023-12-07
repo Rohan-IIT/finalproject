@@ -31,6 +31,8 @@ const LatLong: React.FC = () => {
           const latitude = firstResult.lat;
           const longitude = firstResult.lon;
 
+          localStorage.setItem('Latitude:', latitude);
+          localStorage.setItem('Longitude:', longitude);
           // Store latitude and longitude in state
           setLatitude(latitude);
           setLongitude(longitude);
