@@ -1,53 +1,75 @@
 // CityInputPage.tsx
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
-import UserData from "../types/index";
 
 const CityInputPage: React.FC = () => {
   const router = useRouter();
   const [name, setName] = useState<string>("");
   const [city, setCity] = useState<string>("");
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
   useEffect(() => {
-    // Retrieve name and city from localStorage when the component mounts
+    // Retrieve name, city, latitude, and longitude from localStorage when the component mounts
     const storedName = localStorage.getItem("name");
     const storedCity = localStorage.getItem("city");
+    const storedLatitude = localStorage.getItem("latitude");
+    const storedLongitude = localStorage.getItem("longitude");
 
-    if (storedName && storedCity) {
+    if (storedName && storedCity && storedLatitude && storedLongitude) {
       setName(storedName);
       setCity(storedCity);
+      setLatitude(parseFloat(storedLatitude));
+      setLongitude(parseFloat(storedLongitude));
     }
   }, []);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      // Fetch user data from JSONPlaceholder based on the provided name
-      const response = await fetch(`https://jsonplaceholder.typicode.com/users?name=${name}`);
-      const users = await response.json();
+    // Set name and city in localStorage
+    localStorage.setItem("name", name);
+    localStorage.setItem("city", city);
 
-      // Assuming the first user in the list is the desired one
-      const user = users[0];
+    // Set latitude and longitude in localStorage
+    const geocodeUrl = `https://geocode.maps.co/search?q=${encodeURIComponent(city)}`;
 
-      // Set user data for displaying in the dashboard
-      setUserData(user);
+    fetch(geocodeUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length === 0) {
+          let errorString = 'No location found for the entered city name. Please try entering a correct name.';
+          console.error(errorString);
+          return;
+        }
 
-      // Store name and city in localStorage
-      localStorage.setItem("name", name);
-      localStorage.setItem("city", city);
+        const firstResult = data[0];
 
-      // Pass user data to dashboard
-      router.push({
-        pathname: "/dashboard",
-        query: { name, city, userData: JSON.stringify(user) },
+        if (firstResult && firstResult.lat && firstResult.lon) {
+          const latitude = firstResult.lat;
+          const longitude = firstResult.lon;
+
+          localStorage.setItem('latitude', latitude.toString());
+          localStorage.setItem('longitude', longitude.toString());
+          // Store latitude and longitude in state
+          setLatitude(parseFloat(latitude));
+          setLongitude(parseFloat(longitude));
+
+          console.log('Latitude:', latitude);
+          console.log('Longitude:', longitude);
+        } else {
+          console.error('Invalid geocode API response');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching geolocation data:', error);
       });
 
-
-    } catch (error) {
-      console.error("Error fetching user data", error);
-    }
+    // Redirect to the dashboard
+    router.push({
+      pathname: "/dashboard",
+      query: { name, city },
+    });
   };
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,11 +79,6 @@ const CityInputPage: React.FC = () => {
   const handleCityChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCity(e.target.value);
   };
-
-  useEffect(() => {
-    // Reset user data when the component unmounts or is re-rendered
-    return () => setUserData(null);
-  }, []);
 
   return (
     <div className="container mx-auto mt-8">
