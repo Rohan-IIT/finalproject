@@ -1,7 +1,7 @@
 // CityInputPage.tsx
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
-import UserData from "../interfaces/UserData";
+import UserData from "../types/index";
 
 const CityInputPage: React.FC = () => {
   const router = useRouter();
