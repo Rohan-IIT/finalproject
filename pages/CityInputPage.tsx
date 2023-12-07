@@ -68,7 +68,6 @@ const CityInputPage: React.FC = () => {
     // Redirect to the dashboard
     router.push({
       pathname: "/dashboard",
-      query: { name, city },
     });
   };
 
@@ -81,36 +80,40 @@ const CityInputPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-4">Enter Your Information</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            className="mt-1 p-2 border rounded-md w-full"
-            placeholder="Enter your name"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">City:</label>
-          <input
-            type="text"
-            value={city}
-            onChange={handleCityChange}
-            className="mt-1 p-2 border rounded-md w-full"
-            placeholder="Enter your city"
-            required
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">
-          Submit
-        </button>
-      </form>
-    </div>
+<div className="flex items-center justify-center min-h-screen">
+  <div className="w-full max-w-md">
+    <h2 className="text-2xl font-bold mb-4 text-center">Enter your information to get city data</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-600">Name:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={handleNameChange}
+          className="mt-1 p-2 border rounded-md w-full"
+          placeholder="Enter your name"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-600">City:</label>
+        <input
+          type="text"
+          value={city}
+          onChange={handleCityChange}
+          className="mt-1 p-2 border rounded-md w-full"
+          placeholder="Enter your city"
+          required
+        />
+      </div>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded-md w-full">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+
+
   );
 };
 

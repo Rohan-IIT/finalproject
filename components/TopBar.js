@@ -17,7 +17,7 @@ export default function TopBar({ showNav, setShowNav }) {
 
   return (
     <div
-      className={`fixed w-full h-16 flex justify-between items-center transition-all duration-[400ms] ${showNav ? "pl-56" : ""
+      className={`fixed w-full h-16 flex justify-between items-center transition-all bg-gray-100 duration-[400ms] ${showNav ? "pl-56" : ""
         }`}
     >
       <div className="pl-4 md:pl-16">
@@ -43,7 +43,7 @@ export default function TopBar({ showNav, setShowNav }) {
           onClick={handleHomePageClick}
         >
           <div>
-            <p>Home Page</p>
+            <p className="text-red-500">Return Home Page </p>
           </div>
         </div>
 
