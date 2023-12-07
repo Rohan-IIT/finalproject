@@ -1,14 +1,18 @@
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-
-// LatLong.tsx
+// /pages/LatLong.tsx
 import React, { useEffect } from 'react';
 
 const LatLong: React.FC = () => {
   useEffect(() => {
-    // Get city name from localStorage
+    // Get cityName from localStorage
     const cityName = localStorage.getItem('city');
+
+    if (!cityName) {
+      console.error('City name not found in localStorage');
+      return;
+    }
 
     const geocodeUrl = `https://geocode.maps.co/search?q=${encodeURIComponent(cityName)}`;
 
@@ -18,6 +22,8 @@ const LatLong: React.FC = () => {
         if (data.length === 0) {
           // Handle the case where there are no results for the entered city name
           let errorString = 'No location found for the entered city name. Please try entering a correct name.';
+          console.error(errorString);
+          // Handle the error as needed, such as displaying it to the user
           return;
         }
 
@@ -28,22 +34,22 @@ const LatLong: React.FC = () => {
           const latitude = firstResult.lat;
           const longitude = firstResult.lon;
 
-          // Display in HTML
-          const latLongContainer = document.getElementById('latLong');
-          if (latLongContainer) {
-            latLongContainer.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
-          }
-
-          // Set lat long in localStorage
+          // Store latitude and longitude in localStorage
           localStorage.setItem('latitude', latitude);
           localStorage.setItem('longitude', longitude);
 
-          console.log(latitude, longitude);
+          console.log('Latitude:', latitude);
+          console.log('Longitude:', longitude);
         } else {
           // Handle the case where geocode API response is not as expected
           console.error('Invalid geocode API response');
-          // alert('Error getting geolocation data. Please try again.');
+          // Handle the error as needed, such as displaying it to the user
         }
+      })
+      .catch(error => {
+        console.error('Error fetching geolocation data:', error);
+        // Handle errors and display a message to the user
+        // alert('Error getting geolocation data. Please try again.');
       });
   }, []); // Empty dependency array to run the effect only once
 
