@@ -1,36 +1,16 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+// pages/index.tsx
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-const Home: NextPage = () => {
-  return (
-    <div className={styles.container}>
-      <Head >
-        <title>FE - Rohan Pawar</title>
-        <meta name="description" content="Front end Assignment" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+const Home = () => {
+  const router = useRouter();
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Student register
-        </h1>
+  useEffect(() => {
+    // Redirect to the CityInputPage
+    router.push("/CityInputPage");
+  }, []);
 
-        <div className={styles.grid}>
-          <a href="user-details" className={styles.card}>
-            <h2>Get student data &rarr;</h2>
-          </a>
+  return null; // This page doesn't have any UI, it's just for redirection.
+};
 
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <p>
-          Design and developed by Rohan
-        </p>
-      </footer>
-    </div>
-  )
-}
-
-export default Home
+export default Home;

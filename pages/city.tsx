@@ -1,37 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../types';
-
+import Layout from "../components/Layout";
 interface UserDetailsProps {
   user: User | null;
 }
 
-const UserInput: React.FC<{ onSubmit: (cityName: string) => void }> = ({ onSubmit }) => {
-  const [cityName, setCityName] = useState<string>('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(cityName);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <label className="block text-sm font-medium text-gray-700">Enter City Name:</label>
-      <input
-        type="text"
-        value={cityName}
-        onChange={(e) => setCityName(e.target.value)}
-        className="mt-1 p-2 border rounded w-full"
-      />
-      <button type="submit" className="mt-2 bg-blue-500 text-white px-4 py-2 rounded btn">
-        Get City Photos
-      </button>
-    </form>
-  );
-};
-
-const UserDetailsPage: React.FC = () => {
+const UserDetailsPage: React.FC<UserDetailsProps> = ({ user }) => {
   const [photos, setPhotos] = useState<any[]>([]);
+  
+  // Check if 'window' is defined (i.e., if the code is running on the client side)
+  const cityName = typeof window !== 'undefined' ? localStorage.getItem('city') || '' : '';
 
   const getCityPhotos = async (cityName: string) => {
     try {
@@ -48,16 +27,21 @@ const UserDetailsPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    // Fetch city photos when the component mounts
+    getCityPhotos(cityName);
+  }, []); // Empty dependency array to ensure the effect runs only once
+
   return (
-    <div>
+
+        <Layout>
       <h1 className="mb-4">City Photos Page</h1>
-      <UserInput onSubmit={getCityPhotos} />
       <div id="photoContainer" className="flex flex-wrap">
         {photos.map((photo) => (
           <img key={photo.id} src={photo.src.original} alt={`City Photo ${photo.id}`} className="m-2 rounded" />
         ))}
       </div>
-    </div>
+      </Layout>
   );
 };
 
