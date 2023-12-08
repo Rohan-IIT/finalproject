@@ -57,13 +57,13 @@ const Weather: React.FC = () => {
   
   {weatherData && (
     <div className="bg-white p-4 shadow-md rounded-md">
-    <h2 className="text-2xl font-bold mb-4"> Today's {weatherData.name} Weather Information </h2>
-      <p className="mb-2">Temperature: {weatherData.main.temp}°C</p>
-      <p className="mb-2">Feels Like: {weatherData.main.feels_like}°C</p>
-      <p className="mb-2">Min Temperature: {weatherData.main.temp_min}°C</p>
-      <p className="mb-2">Max Temperature: {weatherData.main.temp_max}°C</p>
+    <h2 className="text-2xl font-bold mb-4"> Todays {weatherData.name} Weather Information </h2>
+      <p className="mb-2">Temperature: {weatherData.main.temp} C</p>
+      <p className="mb-2">Feels Like: {weatherData.main.feels_like} C</p>
+      <p className="mb-2">Min Temperature: {weatherData.main.temp_min} C</p>
+      <p className="mb-2">Max Temperature: {weatherData.main.temp_max} C</p>
       <p className="mb-2">Pressure: {weatherData.main.pressure} hPa</p>
-      <p className="mb-2">Humidity: {weatherData.main.humidity}%</p>
+      <p className="mb-2">Humidity: {weatherData.main.humidity} </p>
       <p className="mb-2">Weather: {weatherData.weather[0].main}</p>
       <p className="mb-2">Description: {weatherData.weather[0].description}</p>
       <p className="mb-2">Wind Speed: {weatherData.wind.speed} m/s</p>
